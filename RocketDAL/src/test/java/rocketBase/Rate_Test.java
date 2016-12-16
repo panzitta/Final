@@ -1,30 +1,47 @@
 package rocketBase;
 
-import static org.junit.Assert.*;
-
 import java.util.ArrayList;
+
+
 
 import org.junit.Test;
 
 import rocketDomain.RateDomainModel;
 
+import static org.junit.Assert.*;
+
+import org.junit.Test;
+
+
+
 public class Rate_Test {
 
 	
-	//TODO - RocketDAL rate_test
-	//		Check to see if a known credit score returns a known interest rate
+	@Test
+	public void interestRate_Test(){
 	
-	//TODO - RocketDAL rate_test
-	//		Check to see if a RateException is thrown if there are no rates for a given
-	//		credit score
+	int score=RateDomainModel.getiMinCreditScore();
+	ArrayList rates = RateDAL.getAllRates();
+	if(score==600){
+		assert(((RateDomainModel) rates.get(0)).getdInterestRate()==5);}
+		else if(score==650){
+			assert(((RateDomainModel) rates.get(1)).getdInterestRate()==4.5);}
+			else if(score==700){
+				assert(((RateDomainModel) rates.get(2)).getdInterestRate()==4);}
+				else if(score==750){
+					assert(((RateDomainModel) rates.get(3)).getdInterestRate()==3.75);}
+					else {
+						assert(((RateDomainModel) rates.get(4)).getdInterestRate()==3.5);}
+	
+	}
+		
 	@Test
 	public void test() {
 		
-		ArrayList<RateDomainModel> rates = RateDAL.getAllRates();
-		System.out.println ("Rates size: " + rates.size());
-		assert(rates.size() > 0);
-		
-		assert(1==1);
+	ArrayList<RateDomainModel> rates = RateDAL.getAllRates();
+	System.out.println ("Rates size: " + rates.size());
+	assert(rates.size() > 0);
+	
 	}
 
 }

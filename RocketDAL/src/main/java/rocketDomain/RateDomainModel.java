@@ -3,8 +3,8 @@ package rocketDomain;
 public class RateDomainModel {
 
 	private int iRateID;
-	private int iMinCreditScore;
-	private double dInterestRate;
+	private static int iMinCreditScore;
+	private static double dInterestRate;
 	
 	public RateDomainModel()
 	{
@@ -19,7 +19,7 @@ public class RateDomainModel {
 		this.iRateID = iRateID;
 	}
 
-	public int getiMinCreditScore() {
+	public static int getiMinCreditScore() {
 		return iMinCreditScore;
 	}
 
@@ -27,7 +27,7 @@ public class RateDomainModel {
 		this.iMinCreditScore = iMinCreditScore;
 	}
 
-	public double getdInterestRate() {
+	public static double getdInterestRate() {
 		return dInterestRate;
 	}
 

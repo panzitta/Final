@@ -1,46 +1,65 @@
 package rocket.app.view;
 
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+
+import org.apache.poi.ss.usermodel.Textbox;
+
 import eNums.eAction;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
 import rocket.app.MainApp;
+import rocketBase.RateBLL;
 import rocketCode.Action;
 import rocketData.LoanRequest;
 
 public class MortgageController {
 
-	private MainApp mainApp;
-	
-	//	TODO - RocketClient.RocketMainController
-	
-	//	Create private instance variables for:
-	//		TextBox  - 	txtIncome
-	//		TextBox  - 	txtExpenses
-	//		TextBox  - 	txtCreditScore
-	//		TextBox  - 	txtHouseCost
-	//		ComboBox -	loan term... 15 year or 30 year
-	//		Labels   -  various labels for the controls
-	//		Button   -  button to calculate the loan payment
-	//		Label    -  to show error messages (exception throw, payment exception)
+	private static MainApp mainApp;
 
+	
+	private Textbox txtIncome;
+	private Textbox txtExpenses;
+	private static Textbox txtCreditScore;
+	private Textbox txtHouseCost;
+	private static ComboBox cmbTerm;
+	private Label Income;
+	private Label Expenses;
+	private static Label HouseCost;
+	private Label CreditScore;
+	private Label Term;
+	private Label lblMortgagePayment;
+	private Button CalcLoanbtn;
+	private Label Error;
+	private Label pay;
+	
 	public void setMainApp(MainApp mainApp) {
 		this.mainApp = mainApp;
 	}
+	public static void RocketMainController(double r, int n, double p, double f, boolean t){
+		RateBLL.getPayment(r, n, p, f, t);
+		 
+	}
 	
-	
-	//	TODO - RocketClient.RocketMainController
-	//			Call this when btnPayment is pressed, calculate the payment
 	@FXML
-	public void btnCalculatePayment(ActionEvent event)
+	public static void btnCalculatePayment(ActionEvent event)
 	{
-		Object message = null;
-		//	TODO - RocketClient.RocketMainController
+		Object message = event;
+		RocketMainController(LoanRequest.getdRate(),LoanRequest.getiTerm(),LoanRequest.getdAmount(),0,false);
+		
+		
 		
 		Action a = new Action(eAction.CalculatePayment);
 		LoanRequest lq = new LoanRequest();
-		//	TODO - RocketClient.RocketMainController
-		//			set the loan request details...  rate, term, amount, credit score, downpayment
-		//			I've created you an instance of lq...  execute the setters in lq
+		
+		lq.setdRate(LoanRequest.getdRate());
+		lq.setiTerm(LoanRequest.getiTerm());
+		lq.setdAmount(LoanRequest.getdAmount());
+		lq.setiCreditScore(LoanRequest.getiCreditScore());
+		lq.setiDownPayment(LoanRequest.getiDownPayment());
 
 		a.setLoanRequest(lq);
 		
@@ -50,11 +69,31 @@ public class MortgageController {
 	
 	public void HandleLoanRequestDetails(LoanRequest lRequest)
 	{
-		//	TODO - RocketClient.HandleLoanRequestDetails
-		//			lRequest is an instance of LoanRequest.
-		//			after it's returned back from the server, the payment (dPayment)
-		//			should be calculated.
-		//			Display dPayment on the form, rounded to two decimal places
+		//CALL NEW FUNCT
+		DecimalFormat f = new DecimalFormat("##.00");
 		
+		String lrequest=(lRequest.toString());
+		pay.setText(f.format(lrequest));
+		
+	}
+	
+	public  void HandleLoanRequestError(LoanRequest lRequest){
+		
+	double PITI1 = LoanRequest.getIncome()/12 *.28;
+	double PITI2 = LoanRequest.getIncome()/12*.36 - LoanRequest.getExpenses();
+	double PITI=0;
+	if (PITI1>=PITI2){
+		PITI=PITI2;
+	}
+	else{
+		PITI=PITI1;
+	}
+	if (PITI>LoanRequest.getdPayment()){
+		HandleLoanRequestDetails(lRequest);
+	}
+	else{
+		pay.setText("Cannot afford payment.");
+	}
+	
 	}
 }

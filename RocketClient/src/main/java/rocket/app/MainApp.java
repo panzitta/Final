@@ -11,6 +11,7 @@ import javax.xml.bind.Marshaller;
 
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Rectangle2D;
@@ -102,11 +103,18 @@ public class MainApp extends Application {
 			Scene scene = new Scene(RocketMain);
 
 			primaryStage.setScene(scene);
+			
+			
+			
 
 			// Give the controller access to the main app.
 			rController = loader.getController();
 			rController.setMainApp(this);
-
+			
+			
+			ActionEvent event = null;
+			rocket.app.view.MortgageController.btnCalculatePayment(event);
+			
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
